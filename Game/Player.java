@@ -9,7 +9,7 @@ import java.awt.geom.Line2D;
 class Player
 {
     Point2D.Double location;
-    double angle=0;
+    double direction=0;
     double x;
     double y;
     double xVelocity;
@@ -23,32 +23,36 @@ class Player
     
     public void calcMove(boolean space)
     {
-        y=y+(xVelocity*Math.sin(Math.toRadians(angle)));
-        x=x+(xVelocity*Math.cos(Math.toRadians(angle)));
-        angle=angle%360;
+        y=y+(-xVelocity*Math.sin(Math.toRadians(direction)));
+        x=x+(xVelocity*Math.cos(Math.toRadians(direction)));
+        direction=(360+direction)%360;
+       
     }    
     public void moveX(double direction,boolean shift, double acc)
     {        
         if(shift)
         {
-            angle+=direction*4;
-            xVelocity+=acc*2;    
+            this.direction+=direction*4;
+            xVelocity+=acc/8;    
         }
         else
         {
-            angle+=direction*2;
-            xVelocity+=acc;
+            this.direction+=direction*2;
+            xVelocity+=acc/16;
         }
               
         xVelocity*=.95;
-            
+        if(Math.abs(xVelocity)<.02)
+        {
+            xVelocity=0;
+        }
        
-            if (xVelocity>35||xVelocity<-35)
+            if (xVelocity>3||xVelocity<-3)
             {            
                 xVelocity*=.9;
                 //xVelocity/=10;
             }
-            else if ((xVelocity>25||xVelocity<-25)&&!shift)
+            else if ((xVelocity>2||xVelocity<-2)&&!shift)
             {
                 xVelocity*=.9;
                 //xVelocity/=10;
@@ -68,9 +72,11 @@ class Player
     
     void draw(Graphics2D g2)
     {                
-        Rectangle rect=new Rectangle((int)x/2+50,(int)y/2+50,10,10);
+        Rectangle rect=new Rectangle((int)x*4+45,(int)y*4+45,10,10);
         g2.setColor(Color.BLACK);
         g2.fill(rect);
+        Line2D.Double l1=new Line2D.Double(x*4+50,y*4+50,30*Math.cos(Math.toRadians(direction))+x*4+50,-30*Math.sin(Math.toRadians(direction))+y*4+50);
+        g2.draw(l1);        
     }
     public void stop()
     {
@@ -92,7 +98,9 @@ class Player
         else
         {
             angle=Math.PI-angle;
-        }
+        }        
+        angle=angle-Math.toRadians(direction);
+        
         return angle;
     }
     public void setSpeed(int speed)

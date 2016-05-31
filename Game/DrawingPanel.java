@@ -23,6 +23,7 @@ public class DrawingPanel extends JPanel
     boolean isShift=false;
     int angleDirection=0;
     
+    static int MMC=4;
     static int windowWidth=0;
     int linearDirection=0;
     int currentLevel=1;
@@ -69,19 +70,19 @@ public class DrawingPanel extends JPanel
            
     public void paintComponent(Graphics g)
     {
-        //windowWidth=getSize().getWidth();
+        windowWidth=(int)getSize().getWidth();
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(4));
         
         for(Wall wall:area)
         {
-            Rectangle rect=new Rectangle((int)wall.getX()/2+50,(int)wall.getY()/2+50,10,10);
-            g2.setColor(Color.BLACK);
+            Rectangle rect=new Rectangle((int)wall.getX()*4+50,(int)wall.getY()*4+50,10,10);
+            g2.setColor(wall.getColor());
             g2.fill(rect);
             double distance=wall.getCenter().distanceSq(player.getCenter());
-            double angle=player.angleOnScreen(wall.getX(),wall.getY());
-            System.out.println(Math.toDegrees(angle));
+            double angle=player.angleOnScreen(wall.getX(),wall.getY());            
+            //System.out.println(windowWidth);
             wall.draw(g2,distance,angle);
             
         }
@@ -137,6 +138,8 @@ public class DrawingPanel extends JPanel
     {
         area = new ArrayList<Wall>();
         area.add(new Wall(new Point2D.Double(5,5),Color.RED));
+        area.add(new Wall(new Point2D.Double(5,6),Color.RED));
+        area.add(new Wall(new Point2D.Double(6,5),Color.RED));
         
     }
     public Color randomColor()

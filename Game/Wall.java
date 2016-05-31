@@ -20,6 +20,11 @@ public class Wall
     {
         return location;
     }   
+    
+    Color getColor()
+    {
+        return color;
+    }
        
     double getX()
     {
@@ -51,10 +56,14 @@ public class Wall
     public void draw(Graphics2D g2,double distance,double angle)
     {
         
-        if(angle<Math.PI/2&&angle>Math.PI/-2)
+        if(Math.abs(angle)<Math.PI/2)
         {
-            int size=(int)(100/distance);
-            Rectangle rect=new Rectangle(600-size/2,(int)0-size/2,size,size);
+            angle=((angle+Math.PI/4)/(Math.PI/2))*DrawingPanel.windowWidth;
+            //System.out.println((DrawingPanel.windowWidth*(int)angle));
+            distance=Math.sqrt(distance);
+            int size=(int)(700/(distance));
+            System.out.println(size);
+            Rectangle rect=new Rectangle((int)angle-size/2,(int)300-size/2,size,size);
             g2.setColor(color);
             g2.fill(rect);
         }
