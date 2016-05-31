@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.params=
+comment0.target=DrawingPanel()
+comment1.params=
+comment1.target=java.awt.Dimension\ getPreferredSize()
+comment2.params=
+comment2.target=void\ finishLevel()
+comment3.params=
+comment3.target=void\ nextLevel()
+comment4.params=g
+comment4.target=void\ paintComponent(java.awt.Graphics)
+comment5.params=
+comment5.target=void\ nextFrame()
+comment6.params=
+comment6.target=void\ makeProjectile()
+comment7.params=which
+comment7.target=void\ loadLevel(int)
+comment8.params=
+comment8.target=java.awt.Color\ randomColor()
+numComments=9

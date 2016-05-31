@@ -1,0 +1,250 @@
+
+import java.awt.Color;
+import java.awt.geom.Point2D;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+
+class Player
+{
+    Point2D.Double location;
+    double angle=0;
+    double x;
+    double y;
+    double xVelocity;
+    double upVelocity;
+    boolean ded=false;
+    public Player()
+    {
+        location=new Point2D.Double(0,0);   
+                
+    }
+    
+    public void calcMove(boolean space)
+    {
+        y=y+(xVelocity*Math.sin(Math.toRadians(angle)));
+        x=x+(xVelocity*Math.cos(Math.toRadians(angle)));
+        angle=angle%360;
+    }    
+    public void moveX(double direction,boolean shift, double acc)
+    {        
+        if(shift)
+        {
+            angle+=direction*4;
+            xVelocity+=acc*2;    
+        }
+        else
+        {
+            angle+=direction*2;
+            xVelocity+=acc;
+        }
+              
+        xVelocity*=.95;
+            
+       
+            if (xVelocity>35||xVelocity<-35)
+            {            
+                xVelocity*=.9;
+                //xVelocity/=10;
+            }
+            else if ((xVelocity>25||xVelocity<-25)&&!shift)
+            {
+                xVelocity*=.9;
+                //xVelocity/=10;
+            }
+        
+    }        
+    public void jump()
+    {
+        
+    }    
+    public void bounce(int behavior)//0 is bounce, 1 is tangible, 2 is intangible
+    {
+    }    
+    public void whenTouchingGround(boolean touching, double groundHeight)
+    {       
+    }
+    
+    void draw(Graphics2D g2)
+    {                
+        Rectangle rect=new Rectangle((int)x/2+50,(int)y/2+50,10,10);
+        g2.setColor(Color.BLACK);
+        g2.fill(rect);
+    }
+    public void stop()
+    {
+        xVelocity=0;
+        upVelocity=0;
+    }
+    public Point2D.Double getCenter()
+    {
+        return new Point2D.Double(x,y);
+    }
+          
+    public double angleOnScreen(double x, double y)//should be like -45 for far left
+    {        
+        double angle=Math.atan((this.y-y)/(this.x-x));       
+        angle=((Math.PI*2+angle))%Math.PI*2;
+        angle/=2;
+        if(this.y-y<0)
+        {angle=Math.PI*2-angle;}
+        else
+        {
+            angle=Math.PI-angle;
+        }
+        return angle;
+    }
+    public void setSpeed(int speed)
+    {
+        upVelocity=speed;
+    }       
+    public boolean getDed()
+    {
+        return ded;
+    }
+    public void setDed(boolean ded)
+    {
+        this.ded=ded;
+    }   
+    public double getUpV()
+    {
+        return upVelocity;
+    }
+    public double getXV()
+    {
+        return xVelocity;
+    }    
+    public double getY()
+    {
+        return y;
+    }
+    public double getX()
+    {
+        return x;
+    }
+    
+    public void move(double x, double y)
+    {
+        this.x=this.x+x;
+        this.y=this.y+y;
+    }
+    
+    public void goTo(double x, double y)
+    {
+        this.x=x;
+        this.y=y;
+    }
+    
+    public boolean isInside(Point2D.Double point)
+    {
+        return false;
+        //return (Math.abs(center.getX()-point.getX())<xradius)&&(Math.abs(center.getY()-point.getY())<yradius);
+    }
+    
+    public boolean isOnTopOfNextFrame(Wall on)
+    {
+        //Point2D.Double center2=new Point2D.Double(center.getX()+xVelocity,center.getY()-upVelocity);        
+        //return(upVelocity<0)&&((on.isInside(new Point2D.Double(center2.getX()+xradius,center2.getY()+yradius)))||(on.isInside(new Point2D.Double(center2.getX()-xradius,center2.getY()+yradius))));
+        return false;
+    }        
+    public boolean isHitNextFrame(Wall on)
+    {
+        //Point2D.Double center2=new Point2D.Double(center.getX()+xVelocity,center.getY()-upVelocity);        
+        //return (on.isInside(new Point2D.Double(center2.getX()+xradius+1,center2.getY()+(yradius*3/4))))||(on.isInside(new Point2D.Double(center2.getX()-xradius-1,center2.getY()+(yradius*.75))))||(on.isInside(new Point2D.Double(center2.getX()-xradius-1,center2.getY()-yradius)))||(on.isInside(new Point2D.Double(center2.getX()+xradius+1,center2.getY()-yradius)));
+        return false;
+    }        
+    public void hitWall(double objX, double objY, double xLength,double yLength, Wall object)
+     {
+//         if(objX-xLength>center.getX()&&objY+yLength>center.getY()-yradius+1)
+//         {            
+//             goTo(objX-xLength-xradius,center.getY());
+//             xVelocity=-.25;
+//             if(DrawingPanel.isJumping&&upVelocity<10)
+//             {
+//                 upVelocity=7;
+//                 xVelocity=-7;
+//             }
+//             
+//         }
+//         else if (objX+xLength<center.getX()&&objY+yLength>center.getY()-yradius+1)
+//         {            
+//             goTo(objX+xLength+xradius,center.getY());
+//             xVelocity=.25;
+//             if(DrawingPanel.isJumping&&upVelocity<10)
+//             {
+//                 upVelocity=7;
+//                 xVelocity=7;
+//             }
+//         }
+//         else if (objY+yLength<center.getY())
+//         {           
+//             goTo(center.getX(),objY+yLength+yradius);
+//             upVelocity=0;
+//             object.hitFromBottom();
+//         }   
+    }
+    
+    public void getPowerUp(int identity)
+    {        
+//         if(identity==powerUpState)
+//         {
+//             identity++;
+//         }
+//         if(powerUpState<identity)
+//         {
+//             powerUpState=identity;
+//             yradius=30+(10*powerUpState);
+//             xradius=baseRadius;
+//         }
+        
+    }
+    public void takeDamage(int type)
+    {
+//         if(vulnerable)
+//         {            
+//             if(type==0||type==1)
+//             {
+//                 vulnerable=false;
+//                 vulnerabilityTimer=100;
+//                 powerUpState--;     
+//                 yradius=30+(10*powerUpState);
+//                 if(powerUpState<0)
+//                 {
+//                     ded=true;
+//                     goTo(50, 400);
+//                     //scrollX=0;
+//                     powerUpState=0;
+//                     yradius=30+(10*powerUpState);
+//                     xradius=baseRadius;
+//                     stop();
+//                 }
+//             }
+//             else if (type==3)
+//             {
+//                 vulnerable=false;
+//                 vulnerabilityTimer=100;
+//                 powerUpState--;     
+//                 yradius=30+(10*powerUpState);
+//                 if(powerUpState<0)
+//                 {
+//                     ded=true;
+//                     goTo(50, 400);
+//                     //scrollX=0;
+//                     powerUpState=0;
+//                     yradius=30+(10*powerUpState);
+//                     xradius=baseRadius;
+//                     stop();
+//                 }
+//                 else
+//                 {
+//                     goTo(center.getX()-200,100);
+//                     stop();
+//                 }
+//                 
+//             }
+//         }
+    }
+        
+}
+
