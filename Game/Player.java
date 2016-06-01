@@ -9,7 +9,7 @@ import java.awt.geom.Line2D;
 class Player
 {
     Point2D.Double location;
-    double direction=0;
+    static double direction=0;
     double x;
     double y;
     double xVelocity;
@@ -33,31 +33,20 @@ class Player
         if(shift)
         {
             this.direction+=direction*4;
-            xVelocity+=acc/8;    
+            xVelocity+=acc/16;    
         }
         else
         {
             this.direction+=direction*2;
-            xVelocity+=acc/16;
+            xVelocity+=acc/32;
         }
               
-        xVelocity*=.95;
-        if(Math.abs(xVelocity)<.02)
+        xVelocity*=.8;
+        if(Math.abs(xVelocity)<.015)
         {
             xVelocity=0;
         }
        
-            if (xVelocity>3||xVelocity<-3)
-            {            
-                xVelocity*=.9;
-                //xVelocity/=10;
-            }
-            else if ((xVelocity>2||xVelocity<-2)&&!shift)
-            {
-                xVelocity*=.9;
-                //xVelocity/=10;
-            }
-        
     }        
     public void jump()
     {
@@ -72,7 +61,7 @@ class Player
     
     void draw(Graphics2D g2)
     {                
-        Rectangle rect=new Rectangle((int)x*4+45,(int)y*4+45,10,10);
+        Rectangle rect=new Rectangle((int)(x*4)+46,(int)(y*4)+46,8,8);
         g2.setColor(Color.BLACK);
         g2.fill(rect);
         Line2D.Double l1=new Line2D.Double(x*4+50,y*4+50,30*Math.cos(Math.toRadians(direction))+x*4+50,-30*Math.sin(Math.toRadians(direction))+y*4+50);
@@ -99,7 +88,7 @@ class Player
         {
             angle=Math.PI-angle;
         }        
-        angle=angle-Math.toRadians(direction);
+        //angle=angle-Math.toRadians(direction);
         
         return angle;
     }

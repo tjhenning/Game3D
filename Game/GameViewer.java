@@ -26,7 +26,7 @@ public class GameViewer
         frame.setTitle("Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
               
-        DrawingPanel canvas=new DrawingPanel();
+        Screen canvas=new Screen();
         frame.add(canvas);        
         
         // make the frame visible which will result in the paintComponent method being invoked on the

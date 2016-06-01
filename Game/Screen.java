@@ -15,7 +15,7 @@ import java.awt.Stroke;
 import java.awt.BasicStroke;
 import java.awt.Rectangle;
 
-public class DrawingPanel extends JPanel
+public class Screen extends JPanel
 {
     ArrayList<Wall> area = new ArrayList<Wall>();
     Player player=new Player();
@@ -23,12 +23,11 @@ public class DrawingPanel extends JPanel
     boolean isShift=false;
     int angleDirection=0;
     
-    static int MMC=4;
     static int windowWidth=0;
     int linearDirection=0;
     int currentLevel=1;
         
-    public DrawingPanel()
+    public Screen()
     {        
         
         setBackground(Color.WHITE);             
@@ -74,18 +73,53 @@ public class DrawingPanel extends JPanel
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(4));
-        
+        {
+            Rectangle rect=new Rectangle(0,0,windowWidth,(int)getSize().getHeight()/2);
+            Rectangle rect2=new Rectangle(0,(int)getSize().getHeight()/2,windowWidth,(int)getSize().getHeight()/2);
+            g2.setColor(new Color(150,150,222));
+            g2.fill(rect);
+            g2.setColor(new Color(150,150,20));
+            g2.fill(rect2);
+        }
+        double[][] disOrder=new double[area.size()][3];
+        int count=0;
         for(Wall wall:area)
         {
-            Rectangle rect=new Rectangle((int)wall.getX()*4+50,(int)wall.getY()*4+50,10,10);
+            Rectangle rect=new Rectangle((int)wall.getX()*4+45,(int)wall.getY()*4+45,10,10);
             g2.setColor(wall.getColor());
             g2.fill(rect);
-            double distance=wall.getCenter().distanceSq(player.getCenter());
-            double angle=player.angleOnScreen(wall.getX(),wall.getY());            
-            //System.out.println(windowWidth);
-            wall.draw(g2,distance,angle);
-            
+            double distance=wall.getCenter().distanceSq(player.getCenter());            
+            disOrder[count][0]=distance;
+            disOrder[count][1]=count;
+            double angle=player.angleOnScreen(wall.getX(),wall.getY());
+            disOrder[count][2]=angle;            
+            count++;
         }
+        double drawDist=0;
+        int which=-1;
+        for(int i=0;i<area.size();i++)
+        {            
+            for(double[] j:disOrder)
+            {
+                if(j[0]>drawDist)
+                {
+                    drawDist=j[0];
+                    which=(int)j[1];
+                }
+            }
+//             for(double[] i2:disOrder)
+//             {
+//                 System.out.print(i2[0]+" and "+i2[1]+"  ");
+//                 
+//             }
+//             System.out.println();
+//             System.out.println(which);
+            drawDist=0;
+            area.get(which).draw(g2,disOrder[which][0],disOrder[which][2]);
+            disOrder[which][0]=-1;
+        }
+        
+        
         player.draw(g2);      
     }
     public void nextFrame()
@@ -136,11 +170,14 @@ public class DrawingPanel extends JPanel
     }
     public void loadLevel(int which)
     {
-        area = new ArrayList<Wall>();
-        area.add(new Wall(new Point2D.Double(5,5),Color.RED));
-        area.add(new Wall(new Point2D.Double(5,6),Color.RED));
-        area.add(new Wall(new Point2D.Double(6,5),Color.RED));
-        
+        area = new ArrayList<Wall>();        
+        area.add(new Wall(new Point2D.Double(5,6),Color.RED,0));
+        area.add(new Wall(new Point2D.Double(6,5),Color.ORANGE,90));
+        area.add(new Wall(new Point2D.Double(1,0),Color.BLUE,90));
+        area.add(new Wall(new Point2D.Double(2,0),Color.GREEN,90));
+        area.add(new Wall(new Point2D.Double(3,0),Color.BLACK,90));
+        area.add(new Wall(new Point2D.Double(0,1),Color.YELLOW,0));
+        area.add(new Wall(new Point2D.Double(0,2),Color.BLACK,0));
     }
     public Color randomColor()
     {

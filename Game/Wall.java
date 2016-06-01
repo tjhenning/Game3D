@@ -6,12 +6,13 @@ import java.awt.Rectangle;
 public class Wall
 {
     Point2D.Double location;
+    double orientation;
     //double radius;
     Color color;    
-    public Wall(Point2D.Double center,  Color color)
+    public Wall(Point2D.Double center,  Color color, double o)
     {
         location=center;
-        
+        orientation=o;
         
         this.color=color;
     }
@@ -53,17 +54,18 @@ public class Wall
     
     
         
-    public void draw(Graphics2D g2,double distance,double angle)
+    public void draw(Graphics2D g2,double distance, double angle)
     {
-        
-        if(Math.abs(angle)<Math.PI/2)
+        double angle2=angle-Math.toRadians(Player.direction);
+        if(Math.abs(angle2)<Math.PI/2&&distance<700)
         {
-            angle=((angle+Math.PI/4)/(Math.PI/2))*DrawingPanel.windowWidth;
-            //System.out.println((DrawingPanel.windowWidth*(int)angle));
+            angle2=((angle2+Math.PI/4)/(Math.PI/2))*Screen.windowWidth;
             distance=Math.sqrt(distance);
-            int size=(int)(700/(distance));
-            System.out.println(size);
-            Rectangle rect=new Rectangle((int)angle-size/2,(int)300-size/2,size,size);
+            int size=(int)(900/(distance));
+            //System.out.println(Math.cos(angle+orientation)+Math.sin(orientation));
+            int width=size;
+            
+            Rectangle rect=new Rectangle((int)angle2-width/2,(int)300-size/2,width,size);
             g2.setColor(color);
             g2.fill(rect);
         }
