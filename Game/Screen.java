@@ -85,14 +85,30 @@ public class Screen extends JPanel
         int count=0;
         for(Wall wall:area)
         {
-            Rectangle rect=new Rectangle((int)wall.getX()*4+45,(int)wall.getY()*4+45,10,10);
-            g2.setColor(wall.getColor());
-            g2.fill(rect);
-            double distance=wall.getCenter().distanceSq(player.getCenter());            
-            disOrder[count][0]=distance;
-            disOrder[count][1]=count;
             double angle=player.angleOnScreen(wall.getX(),wall.getY());
-            disOrder[count][2]=angle;            
+            double diff=Math.abs(angle-Math.toRadians(Player.direction));
+            if(diff>5)
+            {
+                diff-=6.28;
+            }
+            
+            if(diff<1)
+            {                                            
+                Rectangle rect=new Rectangle((int)wall.getX()*4+45,(int)wall.getY()*4+45,10,10);
+                g2.setColor(wall.getColor());
+                g2.fill(rect);
+                double distance=wall.getCenter().distanceSq(player.getCenter());            
+                disOrder[count][0]=distance;
+                disOrder[count][1]=count;
+                disOrder[count][2]=angle;                        
+            }
+            else
+            {
+                disOrder[count][0]=1000;
+                disOrder[count][1]=count;
+                disOrder[count][2]=180;  
+                
+            }
             count++;
         }
         double drawDist=0;
@@ -107,15 +123,11 @@ public class Screen extends JPanel
                     which=(int)j[1];
                 }
             }
-//             for(double[] i2:disOrder)
-//             {
-//                 System.out.print(i2[0]+" and "+i2[1]+"  ");
-//                 
-//             }
-//             System.out.println();
-//             System.out.println(which);
             drawDist=0;
-            area.get(which).draw(g2,disOrder[which][0],disOrder[which][2]);
+            if(disOrder[which][0]<700)
+            {
+                area.get(which).draw(g2,disOrder[which][0],disOrder[which][2]);                  
+            }
             disOrder[which][0]=-1;
         }
         
@@ -171,13 +183,13 @@ public class Screen extends JPanel
     public void loadLevel(int which)
     {
         area = new ArrayList<Wall>();        
-        area.add(new Wall(new Point2D.Double(5,6),Color.RED,0));
-        area.add(new Wall(new Point2D.Double(6,5),Color.ORANGE,90));
-        area.add(new Wall(new Point2D.Double(1,0),Color.BLUE,90));
-        area.add(new Wall(new Point2D.Double(2,0),Color.GREEN,90));
-        area.add(new Wall(new Point2D.Double(3,0),Color.BLACK,90));
-        area.add(new Wall(new Point2D.Double(0,1),Color.YELLOW,0));
-        area.add(new Wall(new Point2D.Double(0,2),Color.BLACK,0));
+        area.add(new Wall(new Point2D.Double(5,6),Color.RED,90,1));
+        area.add(new Wall(new Point2D.Double(5.5,5.5),Color.ORANGE,0,1));
+        area.add(new Wall(new Point2D.Double(1,0),Color.BLUE,0,1));
+        area.add(new Wall(new Point2D.Double(2,0),Color.GREEN,0,1));
+        area.add(new Wall(new Point2D.Double(3,0),Color.BLACK,0,1));
+        area.add(new Wall(new Point2D.Double(.5,.5),Color.YELLOW,90,1));
+        area.add(new Wall(new Point2D.Double(.5,1.5),Color.BLACK,90,1));
     }
     public Color randomColor()
     {
