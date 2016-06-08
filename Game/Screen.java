@@ -76,9 +76,9 @@ public class Screen extends JPanel
         {
             Rectangle rect=new Rectangle(0,0,windowWidth,(int)getSize().getHeight()/2);
             Rectangle rect2=new Rectangle(0,(int)getSize().getHeight()/2,windowWidth,(int)getSize().getHeight()/2);
-            g2.setColor(new Color(150,150,222));
+            g2.setColor(new Color(120,150,222));
             g2.fill(rect);
-            g2.setColor(new Color(150,150,20));
+            g2.setColor(new Color(150,200,20));
             g2.fill(rect2);
         }
         double[][] disOrder=new double[area.size()][3];
@@ -183,13 +183,13 @@ public class Screen extends JPanel
     public void loadLevel(int which)
     {
         area = new ArrayList<Wall>();        
-        area.add(new Wall(new Point2D.Double(5,6),Color.RED,90,1));
-        area.add(new Wall(new Point2D.Double(5.5,5.5),Color.ORANGE,0,1));
+        area.add(new Wall(new Point2D.Double(5,6),Color.RED,90,2));
+        area.add(new Wall(new Point2D.Double(6,5),Color.ORANGE,0,2));
         area.add(new Wall(new Point2D.Double(1,0),Color.BLUE,0,1));
         area.add(new Wall(new Point2D.Double(2,0),Color.GREEN,0,1));
-        area.add(new Wall(new Point2D.Double(3,0),Color.BLACK,0,1));
+        area.add(new Wall(new Point2D.Double(3,0),Color.GRAY,0,1));
         area.add(new Wall(new Point2D.Double(.5,.5),Color.YELLOW,90,1));
-        area.add(new Wall(new Point2D.Double(.5,1.5),Color.BLACK,90,1));
+        area.add(new Wall(new Point2D.Double(.5,1.5),Color.BLUE,90,1));
     }
     public Color randomColor()
     {

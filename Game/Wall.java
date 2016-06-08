@@ -1,7 +1,7 @@
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.Polygon;
 import java.awt.geom.Line2D;
 
 public class Wall
@@ -64,44 +64,92 @@ public class Wall
     {
         double angle2=angle-Math.toRadians(Player.direction);
         if(angle2>4)
-            {
-                angle2-=6.28;
-            }
-            else if(angle2<-4)
-            {
-                angle2+=6.28;
-            }
-            //System.out.println(angle2);
-            angle2=((angle2+Math.PI/4)/(Math.PI/2))*Screen.windowWidth;
-            distance=Math.sqrt(distance);
-            double size=(900/(distance))*len;
-            //calculate facing angle
-            double facingAngle=-1;
-            if(orientation==0)
-            {
-                facingAngle=((angle/1.571)%2)*1.571;
-                
-            }
-            else if(orientation==90)
-            {
-                facingAngle=(((1.571+angle)/1.571)%2)*1.571;
-            }
-            if(facingAngle>1.571)
-            {
-                facingAngle=3.141-facingAngle;
-            }            
-            double sizeDiff=Math.cos(facingAngle)*size/4; 
-            facingAngle=Math.sin(facingAngle);
-                       
-            int width=(int)(size*facingAngle);
-            Line2D.Double l1=new Line2D.Double(angle2-width/2,300-size/2-sizeDiff,angle2+width/2,300-size/2+sizeDiff);
-            Line2D.Double l2=new Line2D.Double(angle2-width/2,300+size/2+sizeDiff,angle2+width/2,300+size/2-sizeDiff);
-            Rectangle rect=new Rectangle((int)angle2-width/2,(int)(300-size/2),width,(int)size);
-            g2.setColor(color);
-            g2.fill(rect);
-            g2.setColor(Color.BLACK);
-            g2.draw(l1);
-            g2.draw(l2);
+        {
+            angle2-=6.28;
+        }
+        else if(angle2<-4)
+        {
+            angle2+=6.28;
+        }
+        
+        
+        double fov=2;
+        angle2*=-fov;
+        System.out.println(angle2);
+        if(angle2>0)
+        {
+            angle2+=.2;
+            angle2=Math.sqrt(angle2);
+            angle2-=.447;
+        }
+        else if(angle2<0)
+        {
+            angle2-=.2;   
+            angle2*=-1;
+            angle2=Math.sqrt(angle2);
+            angle2*=-1;
+            angle2+=.447;
+        }
+        angle2/=fov;
+        
+        angle2=(angle2+Math.PI/4/1.571)*Screen.windowWidth;
+        distance=Math.sqrt(distance);
+        int size=(int)((800/(distance)));
+        double facingAngle=((((orientation/90*1.571)+Math.toRadians(Player.direction))/1.571)%2)*1.571;
+        double fA2=((((orientation/90*1.571)+angle)/1.571)%2)*1.571;
+        
+        
+        //if(fA2>1.571)
+        //{
+        //    fA2=3.141-fA2;
+        //}       
+        //int sizeDiff=(int)(size-(800/(distance+(Math.cos(facingAngle)))));
+        boolean slopeD=(facingAngle>0&&facingAngle<1.572);
+        if(facingAngle>1.571)
+        {
+            facingAngle=3.141-facingAngle;
+        }       
+        int sizeDiff=(int)(size-(800/(distance+(Math.cos(facingAngle)))));
+        
+        
+        
+        
+        sizeDiff/=2;
+        facingAngle=Math.sin(facingAngle);
+                   
+        int width=(int)(size*facingAngle*len);
+        
+        g2.setColor(color);
+       
+           
+        int[] x={(int)(angle2-width/2),
+            (int)(angle2+width/2),
+            (int)(angle2+width/2),
+            (int)(angle2-width/2)};
+        
+        
+        if(slopeD)
+        {
+            int[] y={300-size/2-sizeDiff,
+                300-size/2+sizeDiff,
+                300+size/2-sizeDiff,
+                300+size/2+sizeDiff};
+           Polygon poly=new Polygon(x,y,4);
+            g2.fill(poly);
+            
+        }
+        else
+        {
+            int[] y={300-size/2+sizeDiff,
+                300-size/2-sizeDiff,
+                300+size/2+sizeDiff,
+                300+size/2-sizeDiff};                
+            Polygon poly=new Polygon(x,y,4);
+            g2.fill(poly);
+        }
+        
+        
+            
         
     }
 }
