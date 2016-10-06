@@ -26,7 +26,7 @@ public class Screen extends JPanel
     static int windowWidth=0;
     int linearDirection=0;
     int currentLevel=1;
-        
+    int lorr=0;
     public Screen()
     {        
         
@@ -81,36 +81,51 @@ public class Screen extends JPanel
             g2.setColor(new Color(150,200,20));
             g2.fill(rect2);
         }
-        double[][] disOrder=new double[area.size()][3];
+        double[][] disOrder=new double[area.size()][5];
         int count=0;
+        
         for(Wall wall:area)
-        {
-            double angle=player.angleOnScreen(wall.getX(),wall.getY());
-            double diff=Math.abs(angle-Math.toRadians(Player.direction));
+        {            
+            double angle1=player.angleOnScreen(wall.getX1(),wall.getY1());
+            double angle2=player.angleOnScreen(wall.getX2(),wall.getY2());
+            double diff=Math.abs(angle1-Math.toRadians(Player.direction));
+            double diff2=Math.abs(angle2-Math.toRadians(Player.direction));
+            int centered=1;
+            if (diff2<diff){
+                diff=diff2;
+                centered=2;         
+            }
+            //System.out.println(centered);
             if(diff>5)
             {
                 diff-=6.28;
             }
             
             if(diff<1)
-            {                                            
-                Rectangle rect=new Rectangle((int)wall.getX()*4+45,(int)wall.getY()*4+45,10,10);
+            {                                   
+                Rectangle rect=new Rectangle((int)wall.getPoint1().getX()*10+45,(int)wall.getPoint1().getY()*10+45,(int)(1+((90-wall.getAngle())*wall.getLen()/9)),(int)(1+wall.getAngle()*wall.getLen()/9));               
                 g2.setColor(wall.getColor());
                 g2.fill(rect);
-                double distance=wall.getCenter().distanceSq(player.getCenter());            
-                disOrder[count][0]=distance;
+                double distance1=wall.getPoint1().distanceSq(player.getCenter());
+                double distance2=wall.getPoint2().distanceSq(player.getCenter());
+                
+                disOrder[count][0]=distance1;
                 disOrder[count][1]=count;
-                disOrder[count][2]=angle;                        
+                disOrder[count][2]=angle1;        
+                disOrder[count][3]=angle2;
+                disOrder[count][4]=distance2;
             }
             else
             {
                 disOrder[count][0]=1000;
                 disOrder[count][1]=count;
                 disOrder[count][2]=180;  
-                
+                disOrder[count][3]=180;
+                disOrder[count][4]=1000;
             }
             count++;
-        }
+         }          
+        
         double drawDist=0;
         int which=-1;
         for(int i=0;i<area.size();i++)
@@ -126,13 +141,13 @@ public class Screen extends JPanel
             drawDist=0;
             if(disOrder[which][0]<700)
             {
-                area.get(which).draw(g2,disOrder[which][0],disOrder[which][2]);                  
+                area.get(which).draw(g2,disOrder[which][0],disOrder[which][4],disOrder[which][2],disOrder[which][3]);                  
             }
             disOrder[which][0]=-1;
         }
         
         
-        player.draw(g2);      
+        player.draw(g2);              
     }
     public void nextFrame()
     {
@@ -153,8 +168,10 @@ public class Screen extends JPanel
             
            
             player.moveX(angleDirection,isShift,linearDirection);                
-            
-            
+            if(lorr!=0)
+            {
+                player.moveXSide(isShift,lorr);     
+            }
             
             
             if(player.getDed())
@@ -183,13 +200,12 @@ public class Screen extends JPanel
     public void loadLevel(int which)
     {
         area = new ArrayList<Wall>();        
-        area.add(new Wall(new Point2D.Double(5,6),Color.RED,90,2));
-        area.add(new Wall(new Point2D.Double(6,5),Color.ORANGE,0,2));
-        area.add(new Wall(new Point2D.Double(1,0),Color.BLUE,0,1));
-        area.add(new Wall(new Point2D.Double(2,0),Color.GREEN,0,1));
-        area.add(new Wall(new Point2D.Double(3,0),Color.GRAY,0,1));
-        area.add(new Wall(new Point2D.Double(.5,.5),Color.YELLOW,90,1));
-        area.add(new Wall(new Point2D.Double(.5,1.5),Color.BLUE,90,1));
+        //area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(5,6),Color.RED));
+        area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(8,0),Color.BLUE));
+        //area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(0,12),Color.YELLOW));
+        //area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(6,5),Color.GREEN));
+        //area.add(new Wall(new Point2D.Double(0,12),new Point2D.Double(8,12),Color.GREEN));
+        //area.add(new Wall(new Point2D.Double(8,0),new Point2D.Double(8,12),Color.RED));
     }
     public Color randomColor()
     {
@@ -208,11 +224,11 @@ public class Screen extends JPanel
             {                
                 isShift=true;
             }
-            else if (e.getKeyCode()==KeyEvent.VK_A)
+            else if (e.getKeyCode()==KeyEvent.VK_L)
             {                
                  angleDirection=-1;
             }
-            else if (e.getKeyCode()==KeyEvent.VK_D)
+            else if (e.getKeyCode()==KeyEvent.VK_J)
             {
                  angleDirection=1;
             }            
@@ -224,6 +240,14 @@ public class Screen extends JPanel
             {
                  linearDirection=1;
             }           
+            else if (e.getKeyCode()==KeyEvent.VK_A)
+            {
+                lorr=-1;
+            }
+            else if (e.getKeyCode()==KeyEvent.VK_D)
+            {
+                lorr=1;
+            }
             requestFocusInWindow();           
         }
         public void keyReleased(KeyEvent e)
@@ -232,11 +256,11 @@ public class Screen extends JPanel
             {
                 isShift=false;
             }
-            else if (e.getKeyCode()==KeyEvent.VK_A)
+            else if (e.getKeyCode()==KeyEvent.VK_L)
             {
                  angleDirection=0;
             }
-            else if (e.getKeyCode()==KeyEvent.VK_D)
+            else if (e.getKeyCode()==KeyEvent.VK_J)
             {
                  angleDirection=0;
             }          
@@ -251,6 +275,14 @@ public class Screen extends JPanel
             else if (e.getKeyCode()==KeyEvent.VK_W)
             {
                  linearDirection=0;
+            }
+            else if (e.getKeyCode()==KeyEvent.VK_A)
+            {
+                lorr=0;
+            }
+            else if (e.getKeyCode()==KeyEvent.VK_D)
+            {
+                lorr=0;
             }
         }
         public void keyTyped(KeyEvent e)

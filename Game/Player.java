@@ -13,6 +13,7 @@ class Player
     double x;
     double y;
     double xVelocity;
+    double sideVelocity;
     double upVelocity;
     boolean ded=false;
     public Player()
@@ -23,12 +24,17 @@ class Player
     
     public void calcMove(boolean space)
     {
-        y=y+(-xVelocity*Math.sin(Math.toRadians(direction)));
-        x=x+(xVelocity*Math.cos(Math.toRadians(direction)));
+        double sin=Math.sin(Math.toRadians(direction));
+        double cos=Math.cos(Math.toRadians(direction));
+        y=y+(-xVelocity*sin)+(sideVelocity*cos);
+        x=x+(xVelocity*cos)+(sideVelocity*sin);
         direction=(360+direction)%360;
        
     }    
-    public void moveX(double direction,boolean shift, double acc)
+    /**
+     * note that 'direction' is change in direction and acc is change in speed.
+       */
+    public void moveX(double direction,boolean shift, double acc) 
     {        
         if(shift)
         {
@@ -46,6 +52,24 @@ class Player
         {
             xVelocity=0;
         }
+        sideVelocity*=.8;
+        if(Math.abs(sideVelocity)<.015)
+        {
+            sideVelocity=0;
+        }
+    }    
+    public void moveXSide(boolean shift, double acc) 
+    {        
+        if(shift)
+        {            
+            sideVelocity+=acc/16;    
+        }
+        else
+        {           
+            sideVelocity+=acc/32;
+        }
+              
+        
        
     }        
     public void jump()
@@ -61,10 +85,10 @@ class Player
     
     void draw(Graphics2D g2)
     {                
-        Rectangle rect=new Rectangle((int)(x*4)+46,(int)(y*4)+46,8,8);
+        Rectangle rect=new Rectangle((int)(x*10)+46,(int)(y*10)+46,8,8);
         g2.setColor(Color.BLACK);
         g2.fill(rect);
-        Line2D.Double l1=new Line2D.Double(x*4+50,y*4+50,30*Math.cos(Math.toRadians(direction))+x*4+50,-30*Math.sin(Math.toRadians(direction))+y*4+50);
+        Line2D.Double l1=new Line2D.Double(x*10+50,y*10+50,30*Math.cos(Math.toRadians(direction))+x*10+50,-30*Math.sin(Math.toRadians(direction))+y*10+50);
         g2.draw(l1);        
     }
     public void stop()

@@ -6,26 +6,37 @@ import java.awt.geom.Line2D;
 
 public class Wall
 {
-    Point2D.Double location;
-    //Point2D.Double c1;
-    //Point2D.Double c2;
-    double orientation;
+    //Point2D.Double location;
+    Point2D.Double c1;
+    Point2D.Double c2;
+    double angle;
     double len;
     Color color;    
-    public Wall(Point2D.Double center,  Color color, double o, double length)
+    public Wall(Point2D.Double p1,  Point2D.Double p2, Color color)
     {
-        location=center;
-        //c1=new Point2D.Double(center.getX()+(length*Math.cos(o)),center.getY()+(length*Math.sin(0)));
-        //c2=new Point2D.Double(center.getX()-(length*Math.cos(o)),center.getY()-(length*Math.sin(0)));
-        len=length;
-        orientation=o;
+        //location=(p1.getX()+p2.getX())/2;
+        c1=p1;
+        c2=p2;
+        len=p1.distance(p2);
+        if(p1.getX()-p2.getX()==0)
+            angle=90;
+        else
+            angle=0;
         
         this.color=color;
     }
     
-    public Point2D.Double getCenter()
+//      public Point2D.Double getCenter()
+//      {
+//          return new Point2D.Double(getX(),getY());
+//      }   
+    public Point2D.Double getPoint1()
     {
-        return location;
+        return c1;
+    }   
+    public Point2D.Double getPoint2()
+    {
+        return c2;
     }   
     
     Color getColor()
@@ -35,121 +46,139 @@ public class Wall
        
     double getX()
     {
-        return location.getX();
+        if(c1.getX()>c2.getX())
+        return c2.getX();
+        else
+        return c1.getX();    
+    }
+    double getX1()
+    {
+        return c1.getX();
+    }
+    double getX2()
+    {
+        return c2.getX();
     }
     
-    double getY()
+    double getY1()
     {
-        return location.getY();
+        return c1.getY();
+    }
+    double getY2()
+    {
+        return c2.getY();
     }
     
-    public void move(double x, double y)
+    double getLen()
     {
-        location=new Point2D.Double(location.getX()+x,location.getY()+y);
+        return len;
+    }
+    double getAngle()
+    {
+        return angle;
     }
     
-    public void goTo(double x, double y)
+//     
+//     public void move(double x, double y)
+//     {
+//         location=new Point2D.Double(location.getX()+x,location.getY()+y);
+//     }
+        
+    public void draw(Graphics2D g2,double distance1, double distance2, double angle1, double angle2)
     {
-        location=new Point2D.Double(x,y);
-    }
-    
-    public void goToX(double x)
-    {
-        location=new Point2D.Double(x,location.getY());
-    }    
-    
-    
+         double angle12=angle1-Math.toRadians(Player.direction);
+         if(angle12>4)
+         {
+             angle12-=6.28;
+         }
+         else if(angle12<-4)
+         {
+             angle12+=6.28;
+         }
+                  
+         angle12*=-1;
+         
         
-    public void draw(Graphics2D g2,double distance, double angle)
-    {
-        double angle2=angle-Math.toRadians(Player.direction);
-        if(angle2>4)
-        {
-            angle2-=6.28;
-        }
-        else if(angle2<-4)
-        {
-            angle2+=6.28;
-        }
-        
-        
-        double fov=2;
-        angle2*=-fov;
-        System.out.println(angle2);
-        if(angle2>0)
-        {
-            angle2+=.2;
-            angle2=Math.sqrt(angle2);
-            angle2-=.447;
-        }
-        else if(angle2<0)
-        {
-            angle2-=.2;   
-            angle2*=-1;
-            angle2=Math.sqrt(angle2);
-            angle2*=-1;
-            angle2+=.447;
-        }
-        angle2/=fov;
-        
-        angle2=(angle2+Math.PI/4/1.571)*Screen.windowWidth;
-        distance=Math.sqrt(distance);
-        int size=(int)((800/(distance)));
-        double facingAngle=((((orientation/90*1.571)+Math.toRadians(Player.direction))/1.571)%2)*1.571;
-        double fA2=((((orientation/90*1.571)+angle)/1.571)%2)*1.571;
-        
-        
-        //if(fA2>1.571)
-        //{
-        //    fA2=3.141-fA2;
-        //}       
-        //int sizeDiff=(int)(size-(800/(distance+(Math.cos(facingAngle)))));
-        boolean slopeD=(facingAngle>0&&facingAngle<1.572);
-        if(facingAngle>1.571)
-        {
-            facingAngle=3.141-facingAngle;
-        }       
-        int sizeDiff=(int)(size-(800/(distance+(Math.cos(facingAngle)))));
+         double angle22=angle2-Math.toRadians(Player.direction);
+         if(angle22>4)
+         {
+             angle22-=6.28;
+         }
+         else if(angle22<-4)
+         {
+             angle22+=6.28;
+         }
+         angle22*=-1;
+          System.out.println(angle22);
+//          double fov=2;
+//         angle2*=-fov;
+//         //System.out.println(angle2);
+//         if(angle2>0)
+//         {
+//             angle2+=.2;
+//             angle2=Math.sqrt(angle2);
+//             angle2-=.447;
+//         }
+//         else if(angle2<0)
+//         {
+//             angle2-=.2;   
+//             angle2*=-1;
+//             angle2=Math.sqrt(angle2);
+//             angle2*=-1;
+//             angle2+=.447;
+//         }
+//         angle2/=fov;
         
         
         
         
-        sizeDiff/=2;
-        facingAngle=Math.sin(facingAngle);
-                   
-        int width=(int)(size*facingAngle*len);
+        angle12=(angle12+Math.PI/4/1.571)*Screen.windowWidth;
+        distance1=Math.sqrt(distance1);
+        int size1=(int)((800/(distance1)));
+        
+        angle22=(angle22+Math.PI/4/1.571)*Screen.windowWidth;
+        distance2=Math.sqrt(distance2);
+        int size2=(int)((800/(distance2)));
         
         g2.setColor(color);
-       
-           
-        int[] x={(int)(angle2-width/2),
-            (int)(angle2+width/2),
-            (int)(angle2+width/2),
-            (int)(angle2-width/2)};
+        Line2D.Double l1=new Line2D.Double(angle12,300-(size1/2),angle12,300+(size1/2));
+        g2.draw(l1);
+         Line2D.Double l2=new Line2D.Double(angle22,300-(size2/2),angle22,300+(size2/2));
+        g2.draw(l2);
+        Line2D.Double l3=new Line2D.Double(angle12,300-(size1/2),angle22,300-(size2/2));
+        g2.draw(l3);
+         Line2D.Double l4=new Line2D.Double(angle12,300+(size1/2),angle22,300+(size2/2));
+        g2.draw(l4);
+        
+    
+//         int[] x={(int)(angle2-width/2),
+//             (int)(angle2+width/2),
+//             (int)(angle2+width/2),
+//             (int)(angle2-width/2)};
+//         
+//         
+//         if(slopeD)
+//         {
+//             int[] y={300-size/2-sizeDiff,
+//                 300-size/2+sizeDiff,
+//                 300+size/2-sizeDiff,
+//                 300+size/2+sizeDiff};
+//            Polygon poly=new Polygon(x,y,4);
+//             g2.fill(poly);
+//             
+//         }
+//         else
+//         {
+//             int[] y={300-size/2+sizeDiff,
+//                 300-size/2-sizeDiff,
+//                 300+size/2+sizeDiff,
+//                 300+size/2-sizeDiff};                
+//             Polygon poly=new Polygon(x,y,4);
+//             g2.fill(poly);
+//         }
         
         
-        if(slopeD)
-        {
-            int[] y={300-size/2-sizeDiff,
-                300-size/2+sizeDiff,
-                300+size/2-sizeDiff,
-                300+size/2+sizeDiff};
-           Polygon poly=new Polygon(x,y,4);
-            g2.fill(poly);
             
-        }
-        else
-        {
-            int[] y={300-size/2+sizeDiff,
-                300-size/2-sizeDiff,
-                300+size/2+sizeDiff,
-                300+size/2-sizeDiff};                
-            Polygon poly=new Polygon(x,y,4);
-            g2.fill(poly);
-        }
-        
-        
-            
-        
+//         
     }
 }
