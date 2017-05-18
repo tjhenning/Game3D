@@ -14,6 +14,7 @@ import java.awt.geom.Point2D;
 import java.awt.Stroke;
 import java.awt.BasicStroke;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 
 public class Screen extends JPanel
 {
@@ -81,7 +82,7 @@ public class Screen extends JPanel
             g2.setColor(new Color(150,200,20));
             g2.fill(rect2);
         }
-        double[][] disOrder=new double[area.size()][5];
+        double[][] disOrder=new double[area.size()][6];
         int count=0;
         
         for(Wall wall:area)
@@ -103,9 +104,11 @@ public class Screen extends JPanel
             
             if(diff<1)
             {                                   
-                Rectangle rect=new Rectangle((int)wall.getPoint1().getX()*10+45,(int)wall.getPoint1().getY()*10+45,(int)(1+((90-wall.getAngle())*wall.getLen()/9)),(int)(1+wall.getAngle()*wall.getLen()/9));               
+                //Rectangle rect=new Rectangle(wall.getX1()*10+45,wall.getY1()*10+45,wall.getX2()*10+45,wall.getY2()*10+45);
+                Line2D.Double l1=new Line2D.Double(wall.getX1()*10+45,wall.getY1()*10+45,wall.getX2()*10+45,wall.getY2()*10+45);
                 g2.setColor(wall.getColor());
-                g2.fill(rect);
+                g2.draw(l1);
+                
                 double distance1=wall.getPoint1().distanceSq(player.getCenter());
                 double distance2=wall.getPoint2().distanceSq(player.getCenter());
                 
@@ -114,6 +117,7 @@ public class Screen extends JPanel
                 disOrder[count][2]=angle1;        
                 disOrder[count][3]=angle2;
                 disOrder[count][4]=distance2;
+                disOrder[count][5]=(distance2*distance2)+(distance1*distance1);
             }
             else
             {
@@ -122,6 +126,7 @@ public class Screen extends JPanel
                 disOrder[count][2]=180;  
                 disOrder[count][3]=180;
                 disOrder[count][4]=1000;
+                disOrder[count][5]=999000;
             }
             count++;
          }          
@@ -132,9 +137,9 @@ public class Screen extends JPanel
         {            
             for(double[] j:disOrder)
             {
-                if(j[0]>drawDist)
+                if(j[5]>drawDist)
                 {
-                    drawDist=j[0];
+                    drawDist=j[5];
                     which=(int)j[1];
                 }
             }
@@ -143,7 +148,7 @@ public class Screen extends JPanel
             {
                 area.get(which).draw(g2,disOrder[which][0],disOrder[which][4],disOrder[which][2],disOrder[which][3]);                  
             }
-            disOrder[which][0]=-1;
+            disOrder[which][5]=-1;
         }
         
         
@@ -201,11 +206,28 @@ public class Screen extends JPanel
     {
         area = new ArrayList<Wall>();        
         //area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(5,6),Color.RED));
-        area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(8,0),Color.BLUE));
-        //area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(0,12),Color.YELLOW));
+        //area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(8,0),Color.BLUE));
+        area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(2,0),Color.BLUE));
+        area.add(new Wall(new Point2D.Double(2,0),new Point2D.Double(4,0),Color.BLUE));
+        area.add(new Wall(new Point2D.Double(4,0),new Point2D.Double(6,0),Color.BLUE));
+        area.add(new Wall(new Point2D.Double(6,0),new Point2D.Double(8,0),Color.BLUE));
+        area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(0,3),Color.YELLOW));
+        area.add(new Wall(new Point2D.Double(0,3),new Point2D.Double(0,6),Color.YELLOW));
+        area.add(new Wall(new Point2D.Double(0,6),new Point2D.Double(0,9),Color.YELLOW));
+        area.add(new Wall(new Point2D.Double(0,9),new Point2D.Double(0,12),Color.YELLOW));
         //area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(6,5),Color.GREEN));
-        //area.add(new Wall(new Point2D.Double(0,12),new Point2D.Double(8,12),Color.GREEN));
-        //area.add(new Wall(new Point2D.Double(8,0),new Point2D.Double(8,12),Color.RED));
+        area.add(new Wall(new Point2D.Double(0,12),new Point2D.Double(2,12),Color.GREEN));
+        area.add(new Wall(new Point2D.Double(2,12),new Point2D.Double(4,12),Color.GREEN));
+        area.add(new Wall(new Point2D.Double(4,12),new Point2D.Double(6,12),Color.GREEN));
+        area.add(new Wall(new Point2D.Double(6,12),new Point2D.Double(8,12),Color.GREEN));
+        area.add(new Wall(new Point2D.Double(8,0),new Point2D.Double(8,3),Color.RED));
+        area.add(new Wall(new Point2D.Double(8,3),new Point2D.Double(8,6),Color.RED));
+        area.add(new Wall(new Point2D.Double(8,6),new Point2D.Double(9,6),Color.GRAY));
+        area.add(new Wall(new Point2D.Double(9,3),new Point2D.Double(9,6),Color.GRAY));
+        area.add(new Wall(new Point2D.Double(9,3),new Point2D.Double(12,3),Color.BLACK));
+        area.add(new Wall(new Point2D.Double(12,3),new Point2D.Double(10.666,6),Color.WHITE));
+        area.add(new Wall(new Point2D.Double(10.666,6),new Point2D.Double(9.333,9),Color.WHITE));
+        area.add(new Wall(new Point2D.Double(9.333,9),new Point2D.Double(8,12),Color.WHITE));
     }
     public Color randomColor()
     {

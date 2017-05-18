@@ -109,7 +109,7 @@ public class Wall
              angle22+=6.28;
          }
          angle22*=-1;
-          System.out.println(angle22);
+          //System.out.println(angle22);
 //          double fov=2;
 //         angle2*=-fov;
 //         //System.out.println(angle2);
@@ -151,12 +151,14 @@ public class Wall
         g2.draw(l4);
         
     
-//         int[] x={(int)(angle2-width/2),
-//             (int)(angle2+width/2),
-//             (int)(angle2+width/2),
-//             (int)(angle2-width/2)};
-//         
-//         
+        int[] x={(int)(angle12),
+            (int)(angle22),
+            (int)(angle22),
+            (int)(angle12)};
+        
+        int[] y={300-(size1/2),300-(size2/2),300+(size2/2),300+(size1/2)};                
+            Polygon poly=new Polygon(x,y,4);
+            g2.fill(poly);
 //         if(slopeD)
 //         {
 //             int[] y={300-size/2-sizeDiff,
