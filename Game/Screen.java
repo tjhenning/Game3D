@@ -186,39 +186,47 @@ public class Screen extends JPanel
                         inside2=99;
                     }
                 }                           
-                System.out.println(insideList);
+                
                 for(double inside:insideList)
                 {   
+                    
                     if(Player.direction>Math.toDegrees(inside)&&Player.direction<Math.toDegrees(inside)+180)//GOOD
-                        player.move(Math.sin(inside)*player.getXSpeed(),Math.cos(inside)*player.getXSpeed());    
+                        player.move(Math.sin(inside)*player.getXSpeed()*1.01,Math.cos(inside)*player.getXSpeed()*1.01);    
                     else
-                        player.move(-Math.sin(inside)*player.getXSpeed(),-Math.cos(inside)*player.getXSpeed());    
+                        player.move(-Math.sin(inside)*player.getXSpeed()*1.01,-Math.cos(inside)*player.getXSpeed()*1.01);    
                 }
                 
             }
                       
             if(lorr!=0)
             {
-                player.moveXSide(isShift,lorr);     
-                double inside=99;
+                ArrayList<Double> insideList = new ArrayList<Double>();
+                double inside2=99;
                 for(Wall wall:area)
                 {      
-                    if (inside==99)
-                    inside=wall.isInside(player.getCenter());
-                    
-                }
-                if(inside!=99)
-                {               
-                                        
-                    inside=inside;
+                    inside2=wall.isInside(player.getCenter());
+                    if (inside2!=99)
+                    {
+                        insideList.add(inside2);
+                        inside2=99;
+                    }
+                }                           
+                
+                for(double inside:insideList)
+                {                       
                     if(Player.direction>Math.toDegrees(inside)+90&&Player.direction<Math.toDegrees(inside)+270)
                         player.move(Math.sin(inside)*player.getSideSpeed(),Math.cos(inside)*player.getSideSpeed()); 
                     else
-                        player.move(-Math.sin(inside)*player.getSideSpeed(),-Math.cos(inside)*player.getSideSpeed()); 
+                        player.move(-Math.sin(inside)*player.getSideSpeed(),-Math.cos(inside)*player.getSideSpeed());
+                    
                 }
+                //                
+                
+                //    player.moveXSide(false,lorr*-.3);
+                
             }
             player.moveX(angleDirection,isShift,linearDirection);     
-            
+            player.moveXSide(isShift,lorr);
             if(player.getDed())
             {
                     

@@ -23,6 +23,7 @@ class Player
     
     public void calcMove(boolean space)
     {
+        
         double sin=Math.sin(Math.toRadians(direction));
         double cos=Math.cos(Math.toRadians(direction));
         y=y+(-xVelocity*sin)+(sideVelocity*cos);
@@ -36,6 +37,7 @@ class Player
     public void moveX(double direction,boolean shift, double acc) 
     {       
         xVelocity*=2;
+        
         if(shift)
         {
             this.direction+=direction*4;
@@ -61,14 +63,16 @@ class Player
     }    
     public void moveXSide(boolean shift, double acc) 
     {        
+        sideVelocity*=2;
         if(shift)
         {            
-            sideVelocity+=acc/16;    
+            sideVelocity+=acc/20;    
         }
         else
         {           
-            sideVelocity+=acc/32;
+            sideVelocity+=acc/26;
         }              
+        sideVelocity/=2;
     }        
     public void jump()
     {
@@ -154,8 +158,9 @@ class Player
     {
         this.x=this.x+x;
         this.y=this.y+y;
-        xVelocity=0;
-        sideVelocity=0;
+        System.out.println("Moving "+x+" "+y); 
+        //xVelocity*=-.1;
+        //sideVelocity*=-.1;
     }
     
     public void goTo(double x, double y)
