@@ -19,7 +19,7 @@ import java.awt.geom.Line2D;
 public class Screen extends JPanel
 {
     ArrayList<Wall> area = new ArrayList<Wall>();
-    Player player=new Player();
+    Player player=new Player(1,1);
     //RectObj finish=new RectObj(new Point2D.Double(3000,100),50,1000,Color.BLACK);    
     boolean isShift=false;
     int angleDirection=0;
@@ -63,7 +63,7 @@ public class Screen extends JPanel
     {
         
            
-        player.goTo(0,0);
+        player.goTo(2,2);
         loadLevel(currentLevel);
         
     }
@@ -172,12 +172,52 @@ public class Screen extends JPanel
             player.calcMove(false);      
             
            
-            player.moveX(angleDirection,isShift,linearDirection);                
+                       
+            if(linearDirection>.001)
+            {                    
+                ArrayList<Double> insideList = new ArrayList<Double>();
+                double inside2=99;
+                for(Wall wall:area)
+                {      
+                    inside2=wall.isInside(player.getCenter());
+                    if (inside2!=99)
+                    {
+                        insideList.add(inside2);
+                        inside2=99;
+                    }
+                }                           
+                System.out.println(insideList);
+                for(double inside:insideList)
+                {   
+                    if(Player.direction>Math.toDegrees(inside)&&Player.direction<Math.toDegrees(inside)+180)//GOOD
+                        player.move(Math.sin(inside)*player.getXSpeed(),Math.cos(inside)*player.getXSpeed());    
+                    else
+                        player.move(-Math.sin(inside)*player.getXSpeed(),-Math.cos(inside)*player.getXSpeed());    
+                }
+                
+            }
+                      
             if(lorr!=0)
             {
                 player.moveXSide(isShift,lorr);     
+                double inside=99;
+                for(Wall wall:area)
+                {      
+                    if (inside==99)
+                    inside=wall.isInside(player.getCenter());
+                    
+                }
+                if(inside!=99)
+                {               
+                                        
+                    inside=inside;
+                    if(Player.direction>Math.toDegrees(inside)+90&&Player.direction<Math.toDegrees(inside)+270)
+                        player.move(Math.sin(inside)*player.getSideSpeed(),Math.cos(inside)*player.getSideSpeed()); 
+                    else
+                        player.move(-Math.sin(inside)*player.getSideSpeed(),-Math.cos(inside)*player.getSideSpeed()); 
+                }
             }
-            
+            player.moveX(angleDirection,isShift,linearDirection);     
             
             if(player.getDed())
             {
@@ -205,8 +245,6 @@ public class Screen extends JPanel
     public void loadLevel(int which)
     {
         area = new ArrayList<Wall>();        
-        //area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(5,6),Color.RED));
-        //area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(8,0),Color.BLUE));
         area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(2,0),Color.BLUE));
         area.add(new Wall(new Point2D.Double(2,0),new Point2D.Double(4,0),Color.BLUE));
         area.add(new Wall(new Point2D.Double(4,0),new Point2D.Double(6,0),Color.BLUE));
@@ -215,7 +253,6 @@ public class Screen extends JPanel
         area.add(new Wall(new Point2D.Double(0,3),new Point2D.Double(0,6),Color.YELLOW));
         area.add(new Wall(new Point2D.Double(0,6),new Point2D.Double(0,9),Color.YELLOW));
         area.add(new Wall(new Point2D.Double(0,9),new Point2D.Double(0,12),Color.YELLOW));
-        //area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(6,5),Color.GREEN));
         area.add(new Wall(new Point2D.Double(0,12),new Point2D.Double(2,12),Color.GREEN));
         area.add(new Wall(new Point2D.Double(2,12),new Point2D.Double(4,12),Color.GREEN));
         area.add(new Wall(new Point2D.Double(4,12),new Point2D.Double(6,12),Color.GREEN));
@@ -228,6 +265,9 @@ public class Screen extends JPanel
         area.add(new Wall(new Point2D.Double(12,3),new Point2D.Double(10.666,6),Color.WHITE));
         area.add(new Wall(new Point2D.Double(10.666,6),new Point2D.Double(9.333,9),Color.WHITE));
         area.add(new Wall(new Point2D.Double(9.333,9),new Point2D.Double(8,12),Color.WHITE));
+        area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(6.5,6),Color.ORANGE));
+        area.add(new Wall(new Point2D.Double(5.5,6),new Point2D.Double(6,6),Color.ORANGE));
+        area.add(new Wall(new Point2D.Double(5,6),new Point2D.Double(5.5,6),Color.ORANGE));
     }
     public Color randomColor()
     {

@@ -18,10 +18,9 @@ public class Wall
         c1=p1;
         c2=p2;
         len=p1.distance(p2);
-        if(p1.getX()-p2.getX()==0)
-            angle=90;
-        else
-            angle=0;
+        angle=Math.atan(Math.abs((c2.getY()-c1.getY())/(c2.getX()-c1.getX())));
+        //if (c2.getY()<c1.getY()&&c2.getX()>c1.getX()
+        //angle+=Math.PI*1.5;
         
         this.color=color;
     }
@@ -76,6 +75,20 @@ public class Wall
     double getAngle()
     {
         return angle;
+    }
+    double isInside(Point2D.Double player)
+    {
+        double temp=player.distanceSq((c1.getX()+c2.getX())/2,(c1.getY()+c2.getY())/2);
+        if (temp<6)
+        {
+            if(temp<2)//optimization opprotunity?
+            {return angle;}
+            if(player.distanceSq(c2)<2)
+            {return angle;}
+            if(player.distanceSq(c1)<2)
+            {return angle;}
+        }
+        return 99;
     }
     
 //     
@@ -140,25 +153,26 @@ public class Wall
         distance2=Math.sqrt(distance2);
         int size2=(int)((800/(distance2)));
         
-        g2.setColor(color);
-        Line2D.Double l1=new Line2D.Double(angle12,300-(size1/2),angle12,300+(size1/2));
-        g2.draw(l1);
-         Line2D.Double l2=new Line2D.Double(angle22,300-(size2/2),angle22,300+(size2/2));
-        g2.draw(l2);
-        Line2D.Double l3=new Line2D.Double(angle12,300-(size1/2),angle22,300-(size2/2));
-        g2.draw(l3);
-         Line2D.Double l4=new Line2D.Double(angle12,300+(size1/2),angle22,300+(size2/2));
-        g2.draw(l4);
+        
         
     
         int[] x={(int)(angle12),
             (int)(angle22),
             (int)(angle22),
             (int)(angle12)};
-        
+        g2.setColor(color);
         int[] y={300-(size1/2),300-(size2/2),300+(size2/2),300+(size1/2)};                
-            Polygon poly=new Polygon(x,y,4);
-            g2.fill(poly);
+        Polygon poly=new Polygon(x,y,4);
+        g2.fill(poly);
+        g2.setColor(Color.BLACK);
+        Line2D.Double l1=new Line2D.Double(angle12,300-(size1/2),angle12,300+(size1/2));
+        g2.draw(l1);
+         Line2D.Double l2=new Line2D.Double(angle22,300-(size2/2),angle22,300+(size2/2));
+        g2.draw(l2);
+        Line2D.Double l3=new Line2D.Double(angle12,300-(size1/2),angle22,300-(size2/2));
+        g2.draw(l3);
+        Line2D.Double l4=new Line2D.Double(angle12,300+(size1/2),angle22,300+(size2/2));
+        g2.draw(l4);
 //         if(slopeD)
 //         {
 //             int[] y={300-size/2-sizeDiff,
