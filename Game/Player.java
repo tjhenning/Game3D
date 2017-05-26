@@ -15,6 +15,8 @@ class Player
     double sideVelocity;
     double upVelocity;
     boolean ded=false;
+    final double sliperinessConstant=.8;
+    final double speedConstant=3;
     public Player(double x, double y)
     {
         this.x=x;
@@ -36,7 +38,7 @@ class Player
        */
     public void moveX(double direction,boolean shift, double acc) 
     {       
-        xVelocity*=2;
+        xVelocity*=speedConstant;
         
         if(shift)
         {
@@ -49,21 +51,21 @@ class Player
             xVelocity+=acc/32;
         }
               
-        xVelocity*=.8;
+        xVelocity*=sliperinessConstant;
         if(Math.abs(xVelocity)<.015)
         {
             xVelocity=0;
         }
-        sideVelocity*=.8;
+        sideVelocity*=sliperinessConstant;
         if(Math.abs(sideVelocity)<.015)
         {
             sideVelocity=0;
         }
-        xVelocity/=2;
+        xVelocity/=speedConstant;
     }    
     public void moveXSide(boolean shift, double acc) 
     {        
-        sideVelocity*=2;
+        sideVelocity*=speedConstant;
         if(shift)
         {            
             sideVelocity+=acc/20;    
@@ -72,7 +74,7 @@ class Player
         {           
             sideVelocity+=acc/26;
         }              
-        sideVelocity/=2;
+        sideVelocity/=speedConstant;
     }        
     public void jump()
     {

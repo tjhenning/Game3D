@@ -183,6 +183,7 @@ public class Screen extends JPanel
                     if (inside2!=99)
                     {
                         insideList.add(inside2);
+                        wall.whichSide(player.getCenter());
                         inside2=99;
                     }
                 }                           
@@ -214,6 +215,7 @@ public class Screen extends JPanel
                 
                 for(double inside:insideList)
                 {                       
+                    
                     if(Player.direction>Math.toDegrees(inside)+90&&Player.direction<Math.toDegrees(inside)+270)
                         player.move(Math.sin(inside)*player.getSideSpeed(),Math.cos(inside)*player.getSideSpeed()); 
                     else

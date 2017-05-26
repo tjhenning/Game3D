@@ -90,12 +90,11 @@ public class Wall
         }
         return 99;
     }
+    boolean whichSide(Point2D.Double player)//true is above/left
+    {
+        return false;
+    }
     
-//     
-//     public void move(double x, double y)
-//     {
-//         location=new Point2D.Double(location.getX()+x,location.getY()+y);
-//     }
         
     public void draw(Graphics2D g2,double distance1, double distance2, double angle1, double angle2)
     {
