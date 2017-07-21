@@ -187,14 +187,23 @@ public class Screen extends JPanel
                         inside2=99;
                     }
                 }                           
-                
+                //inside contains an angle, the one returned by isInside
                 for(double inside:insideList)
                 {   
                     
-                    if(Player.direction>Math.toDegrees(inside)&&Player.direction<Math.toDegrees(inside)+180)//GOOD
-                        player.move(Math.sin(inside)*player.getXSpeed()*1.01,Math.cos(inside)*player.getXSpeed()*1.01);    
+                    if(inside>200)
+                    {
+                        inside-=200;
+                        System.out.println("above");
+                        player.move(-Math.sin(inside)*player.getXSpeed()*1.01,-Math.cos(inside)*player.getXSpeed()*1.01);
+                        //player.move(Math.sin(inside)*player.getXSpeed()*1.01,Math.cos(inside)*player.getXSpeed()*1.01);    
+                    }
                     else
-                        player.move(-Math.sin(inside)*player.getXSpeed()*1.01,-Math.cos(inside)*player.getXSpeed()*1.01);    
+                    {
+                        //player.move(-Math.sin(inside)*player.getXSpeed()*1.01,-Math.cos(inside)*player.getXSpeed()*1.01);    
+                        player.move(Math.sin(inside)*player.getXSpeed()*1.01,Math.cos(inside)*player.getXSpeed()*1.01);
+                        System.out.println("below");
+                    }
                 }
                 
             }
@@ -217,8 +226,8 @@ public class Screen extends JPanel
                 {                       
                     
                     if(Player.direction>Math.toDegrees(inside)+90&&Player.direction<Math.toDegrees(inside)+270)
-                        player.move(Math.sin(inside)*player.getSideSpeed(),Math.cos(inside)*player.getSideSpeed()); 
-                    else
+                        player.move(Math.sin(inside)*player.getSideSpeed(),Math.cos(inside)*player.getSideSpeed());
+                   else
                         player.move(-Math.sin(inside)*player.getSideSpeed(),-Math.cos(inside)*player.getSideSpeed());
                     
                 }
@@ -255,29 +264,33 @@ public class Screen extends JPanel
     public void loadLevel(int which)
     {
         area = new ArrayList<Wall>();        
-        area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(2,0),Color.BLUE));
-        area.add(new Wall(new Point2D.Double(2,0),new Point2D.Double(4,0),Color.BLUE));
-        area.add(new Wall(new Point2D.Double(4,0),new Point2D.Double(6,0),Color.BLUE));
-        area.add(new Wall(new Point2D.Double(6,0),new Point2D.Double(8,0),Color.BLUE));
-        area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(0,3),Color.YELLOW));
-        area.add(new Wall(new Point2D.Double(0,3),new Point2D.Double(0,6),Color.YELLOW));
-        area.add(new Wall(new Point2D.Double(0,6),new Point2D.Double(0,9),Color.YELLOW));
-        area.add(new Wall(new Point2D.Double(0,9),new Point2D.Double(0,12),Color.YELLOW));
-        area.add(new Wall(new Point2D.Double(0,12),new Point2D.Double(2,12),Color.GREEN));
-        area.add(new Wall(new Point2D.Double(2,12),new Point2D.Double(4,12),Color.GREEN));
-        area.add(new Wall(new Point2D.Double(4,12),new Point2D.Double(6,12),Color.GREEN));
-        area.add(new Wall(new Point2D.Double(6,12),new Point2D.Double(8,12),Color.GREEN));
-        area.add(new Wall(new Point2D.Double(8,0),new Point2D.Double(8,3),Color.RED));
-        area.add(new Wall(new Point2D.Double(8,3),new Point2D.Double(8,6),Color.RED));
-        area.add(new Wall(new Point2D.Double(8,6),new Point2D.Double(9,6),Color.GRAY));
-        area.add(new Wall(new Point2D.Double(9,3),new Point2D.Double(9,6),Color.GRAY));
-        area.add(new Wall(new Point2D.Double(9,3),new Point2D.Double(12,3),Color.BLACK));
-        area.add(new Wall(new Point2D.Double(12,3),new Point2D.Double(10.666,6),Color.WHITE));
-        area.add(new Wall(new Point2D.Double(10.666,6),new Point2D.Double(9.333,9),Color.WHITE));
-        area.add(new Wall(new Point2D.Double(9.333,9),new Point2D.Double(8,12),Color.WHITE));
-        area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(6.5,6),Color.ORANGE));
-        area.add(new Wall(new Point2D.Double(5.5,6),new Point2D.Double(6,6),Color.ORANGE));
-        area.add(new Wall(new Point2D.Double(5,6),new Point2D.Double(5.5,6),Color.ORANGE));
+//         area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(2,0),Color.BLUE));
+//         area.add(new Wall(new Point2D.Double(2,0),new Point2D.Double(4,0),Color.BLUE));
+//         area.add(new Wall(new Point2D.Double(4,0),new Point2D.Double(6,0),Color.BLUE));
+//         area.add(new Wall(new Point2D.Double(6,0),new Point2D.Double(8,0),Color.BLUE));
+         area.add(new Wall(new Point2D.Double(0,0),new Point2D.Double(0,3),Color.YELLOW));
+         area.add(new Wall(new Point2D.Double(0,3),new Point2D.Double(0,6),Color.YELLOW));
+         area.add(new Wall(new Point2D.Double(0,6),new Point2D.Double(0,9),Color.YELLOW));
+         area.add(new Wall(new Point2D.Double(0,9),new Point2D.Double(0,12),Color.YELLOW));
+         area.add(new Wall(new Point2D.Double(0,12),new Point2D.Double(2,12),Color.GREEN));
+         area.add(new Wall(new Point2D.Double(2,12),new Point2D.Double(4,12),Color.GREEN));
+         area.add(new Wall(new Point2D.Double(4,12),new Point2D.Double(6,12),Color.GREEN));
+         area.add(new Wall(new Point2D.Double(6,12),new Point2D.Double(8,12),Color.GREEN));
+//         area.add(new Wall(new Point2D.Double(8,0),new Point2D.Double(8,3),Color.RED));
+//         area.add(new Wall(new Point2D.Double(8,3),new Point2D.Double(8,6),Color.RED));
+//         area.add(new Wall(new Point2D.Double(8,6),new Point2D.Double(9,6),Color.GRAY));
+//         area.add(new Wall(new Point2D.Double(9,3),new Point2D.Double(9,6),Color.GRAY));
+//         area.add(new Wall(new Point2D.Double(9,3),new Point2D.Double(12,3),Color.BLACK));
+        area.add(new Wall(new Point2D.Double(11,3),new Point2D.Double(10,4),Color.WHITE));
+        area.add(new Wall(new Point2D.Double(10,4),new Point2D.Double(9,5),Color.WHITE));
+        area.add(new Wall(new Point2D.Double(9,5),new Point2D.Double(8,6),Color.WHITE));
+//        area.add(new Wall(new Point2D.Double(8,6),new Point2D.Double(7,7),Color.WHITE));
+//         area.add(new Wall(new Point2D.Double(6,6),new Point2D.Double(6.5,6),Color.ORANGE));
+//         area.add(new Wall(new Point2D.Double(5.5,6),new Point2D.Double(6,6),Color.ORANGE));
+//         area.add(new Wall(new Point2D.Double(5,6),new Point2D.Double(5.5,6),Color.ORANGE));
+ //        area.add(new Wall(new Point2D.Double(0,2),new Point2D.Double(1,4),Color.WHITE));
+ //        area.add(new Wall(new Point2D.Double(1,4),new Point2D.Double(2,6),Color.WHITE));
+ //        area.add(new Wall(new Point2D.Double(2,6),new Point2D.Double(3,8),Color.WHITE));
     }
     public Color randomColor()
     {

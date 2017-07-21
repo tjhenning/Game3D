@@ -160,7 +160,7 @@ class Player
     {
         this.x=this.x+x;
         this.y=this.y+y;
-        System.out.println("Moving "+x+" "+y); 
+        //System.out.println("Moving "+x+" "+y); 
         //xVelocity*=-.1;
         //sideVelocity*=-.1;
     }
