@@ -1,6 +1,6 @@
 #BlueJ class context
-comment0.params=p1\ p2\ color
-comment0.target=Wall(java.awt.geom.Point2D.Double,\ java.awt.geom.Point2D.Double,\ java.awt.Color)
+comment0.params=p1\ p2\ color\ direction
+comment0.target=Wall(java.awt.geom.Point2D.Double,\ java.awt.geom.Point2D.Double,\ java.awt.Color,\ double)
 comment1.params=
 comment1.target=java.awt.geom.Point2D.Double\ getPoint1()
 comment10.params=

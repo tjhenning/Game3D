@@ -92,7 +92,7 @@ class Player
         Rectangle rect=new Rectangle((int)(x*10)+41,(int)(y*10)+41,8,8);
         g2.setColor(Color.BLACK);
         g2.fill(rect);
-        Line2D.Double l1=new Line2D.Double(x*10+45,y*10+45,30*Math.cos(Math.toRadians(direction))+x*10+50,-30*Math.sin(Math.toRadians(direction))+y*10+50);
+        Line2D.Double l1=new Line2D.Double(x*10+45,y*10+45,30*Math.cos(Math.toRadians(direction))+x*10+45,-30*Math.sin(Math.toRadians(direction))+y*10+45);
         g2.draw(l1);        
     }
     public void stop()

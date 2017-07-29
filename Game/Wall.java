@@ -13,25 +13,24 @@ public class Wall
     double len;
     //double angleratio;
     Color color;    
-    public Wall(Point2D.Double p1,  Point2D.Double p2, Color color)
+    public Wall(Point2D.Double p1,  Point2D.Double p2, Color color, double direction)//uhh 200 is above
     {
         //location=(p1.getX()+p2.getX())/2;
         c1=p1;
         c2=p2;
         len=p1.distance(p2);
-        if(c2.getY()>c1.getY())
-        {
-            Point2D.Double temp=c2;
-            c2=c1;
-            c1=temp;
-        }
+//         if(c2.getY()>c1.getY())
+//         {
+//             Point2D.Double temp=c2;
+//             c2=c1;
+//             c1=temp;
+//         }
         
         angle=Math.atan((c2.getY()-c1.getY())*-1/(c2.getX()-c1.getX()));
         if(angle<0)
         {angle+=3.14159;}
-        
-        
-        
+       
+        angle+=direction;
         
         this.color=color;
     }
@@ -90,75 +89,18 @@ public class Wall
     double isInside(Point2D.Double player)
     {
         double temp=player.distanceSq((c1.getX()+c2.getX())/2,(c1.getY()+c2.getY())/2);
-        if (temp<3)
+        if (temp<len*4)
         {
-            if(temp<1)//optimization opprotunity?
-            {
-                double angleratio2=Math.atan((player.getY()-c1.getY())*-1/(player.getX()-c1.getX()));
-                if(angleratio2<0)
-                {angleratio2+=3.14159;}
-                
-                System.out.println(angleratio2+"  "+angle);
-                if (angle<Math.PI/2)
-                {
-                    if (angleratio2>angle)
-                    {
-                        return angle+200;
-                    }
-                }
-                else
-                {   
-                    if (angleratio2<angle)
-                    {
-                        return angle+200;
-                    }
-                }//System.out.println(angleratio2+"  "+angle);
+            if(temp<2)//optimization opprotunity?
+            {                
                 return angle;
             }
-            if(player.distanceSq(c2)<1)
-            {
-                double angleratio2=Math.atan((player.getY()-c1.getY())*-1/(player.getX()-c1.getX()));
-                if(angleratio2<0)
-                {
-                    angleratio2+=3.14159;
-                }
-                System.out.println(angleratio2+"  "+angle);
-                if (angle<Math.PI/2)
-                {
-                    if (angleratio2>angle)
-                    {
-                        return angle+200;
-                    }
-                }
-                else
-                {   
-                    if (angleratio2<angle)
-                    {
-                        return angle+200;
-                    }
-                }//System.out.println(angleratio2+"  "+angle);
+            if(player.distanceSq(c2)<2)
+            {                
                 return angle;
             }
-            if(player.distanceSq(c1)<1)
+            if(player.distanceSq(c1)<2)
             {
-                double angleratio2=Math.atan((player.getY()-c1.getY())*-1/(player.getX()-c1.getX()));
-                if(angleratio2<0)
-                {angleratio2+=3.14159;}
-                
-                if (angle<Math.PI/2)
-                {
-                    if (angleratio2>angle)
-                    {
-                        return angle+200;
-                    }
-                }
-                else
-                {   
-                    if (angleratio2<angle)
-                    {
-                        return angle+200;
-                    }
-                }System.out.println(angleratio2+"  "+angle);
                 return angle;
             }
         }
